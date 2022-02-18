@@ -1,7 +1,4 @@
-// select canvas element
-
-const worker = new Worker("/worker.js", { type: "module" });
-
+import "./pose.js";
 const canvas = document.getElementById("pong");
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
@@ -28,6 +25,7 @@ const ball = {
   velocityY: 5,
   speed: 7,
   color: "WHITE",
+  direction: -1,
 };
 
 // User Paddle
@@ -176,6 +174,7 @@ function update() {
     let direction = ball.x + ball.radius < canvas.width / 2 ? 1 : -1;
     ball.velocityX = direction * ball.speed * Math.cos(angleRad);
     ball.velocityY = ball.speed * Math.sin(angleRad);
+    ball.direction = direction;
 
     // speed up the ball everytime a paddle hits it.
     ball.speed += 0.1;
@@ -206,11 +205,8 @@ function render() {
   drawArc(ball.x, ball.y, ball.radius, ball.color);
 }
 function run() {
-  const s = Date.now();
   update();
   render();
-  const d = Date.now() - s;
-  document.title = d.toString();
   requestAnimationFrame(run);
 }
 
